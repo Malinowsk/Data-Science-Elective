@@ -11,7 +11,13 @@ primerAño <- subset(cursadas_filtro_3, (materia == 1) | (materia == 2)  | (mate
 
 View(primerAño) # muestro tabla
 summary(primerAño) # info de la tabla
-cor(primerAño) # correlacion lineal
+cor(primerAño) # correlacion lineal , devuelve la matriz de correlacion (coeficiente a priori)
+
+mostrar <- lm(nota~Legajo+cond_regularidad+materia,primerAño)
+mostrar # se muestra los valores de los coeficientes (A,B,c,D) de la funcion y=Ax+Bz+Cw+D, siendo "y" la variable nota  
+summary(mostrar) # varios datos entre ellos el coeficiente de determinacion (coeficiente a posteriori) "Adjusted R-squared:  0.06694" muy bajo
+
+
 
 write.csv(x = primerAño, file = "primerAño.csv",row.names = FALSE) # guardo tabla en un archivo csv para probar en infostat
 
