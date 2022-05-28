@@ -13,7 +13,7 @@ View(primerAño) # muestro tabla
 summary(primerAño) # info de la tabla
 cor(primerAño) # correlacion lineal , devuelve la matriz de correlacion (coeficiente a priori)
 
-mostrar <- lm(nota~Legajo+cond_regularidad+materia,primerAño)
+mostrar <- lm(nota~Legajo+cond_regularidad+materia,primerAño) #regresion lineal multiple
 mostrar # se muestra los valores de los coeficientes (A,B,c,D) de la funcion y=Ax+Bz+Cw+D, siendo "y" la variable nota  
 summary(mostrar) # varios datos entre ellos el coeficiente de determinacion (coeficiente a posteriori) "Adjusted R-squared:  0.06694" muy bajo
 
@@ -37,3 +37,12 @@ library("vioplot")
 
 vioplot(primerAño$nota, col="red")
 vioplot(primerAño$Legajo, col="blue")
+
+
+#install.packages("scatterplot3d")
+library("scatterplot3d")
+
+s3d<-scatterplot3d(primerAño[,c("nota","Legajo","materia","cond_regularidad")], type="h", highlight.3d=TRUE,angle=55, scale.y=0.7, pch=16, main="lindo quilombo")
+
+#s3d$plane3d(reg2, lty.box="solid")
+
