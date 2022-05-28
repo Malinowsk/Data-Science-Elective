@@ -7,7 +7,7 @@ cursadas_filtro_1 = subset(cursadas,carrera==206 & plan==2011) # filtro carrera 
 cursadas_filtro_2 <- cursadas_filtro_1[c(2,5,9,11)]          # seleccion columnas
 cursadas_filtro_3 <- subset(cursadas_filtro_2, nota != "NA") # elimino nulos de columna nota
 
-primerAño <- subset(cursadas_filtro_3, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )  // filtro por materias de primer año
+primerAño <- subset(cursadas_filtro_3, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )  # filtro por materias de primer año
 
 View(primerAño) # muestro tabla
 summary(primerAño) # info de la tabla
@@ -45,4 +45,6 @@ library("scatterplot3d")
 s3d<-scatterplot3d(primerAño[,c("nota","Legajo","materia","cond_regularidad")], type="h", highlight.3d=TRUE,angle=55, scale.y=0.7, pch=16, main="lindo quilombo")
 
 #s3d$plane3d(reg2, lty.box="solid")
+
+plot(primerAño)
 
