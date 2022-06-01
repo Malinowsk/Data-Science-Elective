@@ -1,15 +1,35 @@
 # trabajando en el ejercicio 2
 
-library(readxl) # sirve? supongo que si
+library("readxl") 
+library("sqldf")
 
 cursadas = read_excel("Datos excel/C.xlsx")        # asignacion tabla de excel (cursadas) en variable
 cursadas_filtro_1 = subset(cursadas,carrera==206 & plan==2011) # filtro carrera y plan
 cursadas_filtro_2 <- cursadas_filtro_1[c(2,5,9,11)]          # seleccion columnas
 cursadas_filtro_3 <- subset(cursadas_filtro_2, nota != "NA") # elimino nulos de columna nota
+cursadas_filtro_3 <- subset(cursadas_filtro_3, nota >= 4) # elimino nulos de columna nota
 
 primerAño <- subset(cursadas_filtro_3, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )  # filtro por materias de primer año
 
 View(primerAño)
+
+
+alumnos = read_excel("Datos excel/A.xlsx")        # asignacion tabla de excel (cursadas) en variable
+
+alumnos
+
+library("lubridate")
+
+
+prueba = filter(alumnos,year(fecha_ingreso) == 2018)
+
+f <- subset(alumnos, fecha_ingreso >= ymd_hms( "2018-01-01 00:00:00" ) & fecha_ingreso >= ymd_hms( "2018-01-01 00:00:00" ))
+
+View(f)
+
+sqldf("select fecha_ingreso from alumnos where fecha_ingreso ")
+
+
 
 finales = read_excel("Datos excel/F.xlsx")        # asignacion tabla de excel (finales) en variable
 finales_filtro_1 = subset(finales,carrera==206 & plan==2011) # filtro carrera y plan
@@ -24,3 +44,6 @@ View(primerAñof)
 
 # luego ver que da los coeficientes y graficas
 
+final <- merge(x=primerAño,y=primerAñof,by.x="Legajo",by.y="legajo", all=FALSE)
+
+View(final)
