@@ -22,11 +22,11 @@ cursadasIng2011ColumnasSinNotasNulas <- subset(cursadasIng2011, nota != "NA")
 
 View(cursadasIng2011ColumnasSinNotasNulas)
 
-# desaprobado
+                                                        # desaprobado
 cursadasIng2011ColumnasSinNotasNulas$cond_regularidad <- replace(cursadasIng2011ColumnasSinNotasNulas$cond_regularidad,cursadasIng2011ColumnasSinNotasNulas$cond_regularidad==3,   2)
-# insuficiente
+                                                        # insuficiente
 cursadasIng2011ColumnasSinNotasNulas$cond_regularidad <- replace(cursadasIng2011ColumnasSinNotasNulas$cond_regularidad,cursadasIng2011ColumnasSinNotasNulas$cond_regularidad==100, 1)
-# aprobado
+                                                        # aprobado
 cursadasIng2011ColumnasSinNotasNulas$cond_regularidad <- replace(cursadasIng2011ColumnasSinNotasNulas$cond_regularidad,cursadasIng2011ColumnasSinNotasNulas$cond_regularidad==0,   3)
 
 View(cursadasIng2011ColumnasSinNotasNulas)
