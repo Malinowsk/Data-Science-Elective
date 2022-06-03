@@ -3,47 +3,28 @@
 library("readxl") 
 library("sqldf")
 
-cursadas = read_excel("Datos excel/C.xlsx")        # asignacion tabla de excel (cursadas) en variable
-cursadas_filtro_1 = subset(cursadas,carrera==206 & plan==2011) # filtro carrera y plan
-cursadas_filtro_2 <- cursadas_filtro_1[c(2,5,9,11)]          # seleccion columnas
-cursadas_filtro_3 <- subset(cursadas_filtro_2, nota != "NA") # elimino nulos de columna nota
-cursadas_filtro_3 <- subset(cursadas_filtro_3, nota >= 4) # elimino nulos de columna nota
+tablaEjercicio1 = read_excel("tablaEjercicio1.xlsx") # carga de datos del ejecicio 1
 
-primerAño <- subset(cursadas_filtro_3, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )  # filtro por materias de primer año
+cursadasAprobadas = subset(tablaEjercicio1, nota >= 4) # filtro por cursadas aprobadas
+View(cursadasAprobadas)
 
-View(primerAño)
+finales = read_excel("Datos excel/F.xlsx") # carga de datos del tabla finales
 
+finalesAprobados = subset(finales, nota >=4 &carrera == 206 & plan == 2011) # filtro aprobados, ing plan 2011
+View(finalesAprobados)
 
-alumnos = read_excel("Datos excel/A.xlsx")        # asignacion tabla de excel (cursadas) en variable
+cursadasYfinales = sqldf(" select c.Legajo, c.materia , c.cond_regularidad , c.nota as notaCursada, f.nota as notaFinal 
+                            from cursadasAprobadas c join finalesAprobados f 
+                            on (c.legajo = f.Legajo) and (c.materia = f.materia)")
+View(cursadasYfinales)
 
-alumnos
+cor(cursadasYfinales) # correlacion lineal, retorna la matriz de correlacion
 
-library("lubridate")
+regresionLinealMultiple <- lm(notaFinal~Legajo+cond_regularidad+materia+notaCursada, cursadasYfinales) #regresion lineal multiple
 
+regresionLinealMultiple # se muestra los valores de los coeficientes (A,B,C,D) de la funcion y=Ax+Bz+Cw+D, siendo "y" la variable notaFinal  
 
-prueba = filter(alumnos,year(fecha_ingreso) == 2018)
+summary(regresionLinealMultiple) # varios datos entre ellos el coeficiente de determinacion (coeficiente a posteriori)
 
-f <- subset(alumnos, fecha_ingreso >= ymd_hms( "2018-01-01 00:00:00" ) & fecha_ingreso >= ymd_hms( "2018-01-01 00:00:00" ))
-
-View(f)
-
-sqldf("select fecha_ingreso from alumnos where fecha_ingreso ")
-
-
-
-finales = read_excel("Datos excel/F.xlsx")        # asignacion tabla de excel (finales) en variable
-finales_filtro_1 = subset(finales,carrera==206 & plan==2011) # filtro carrera y plan
-finales_filtro_2 <- finales_filtro_1[c(2,3,6)]          # seleccion columnas
-finales_filtro_3 <- subset(finales_filtro_2, nota != "NA")
-
-primerAñof <- subset(finales_filtro_3, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )
-
-View(primerAñof)
-
-# juntar (primerAño con primerAñof) por columnas Legajo y materia 
-
-# luego ver que da los coeficientes y graficas
-
-final <- merge(x=primerAño,y=primerAñof,by.x="Legajo",by.y="legajo", all=FALSE)
-
-View(final)
+write_xlsx(cursadasYfinales,"tablaEjercicio2.xlsx")
+write.csv(cursadasYfinales, file = "tablaEjercicio2.csv",row.names = FALSE)

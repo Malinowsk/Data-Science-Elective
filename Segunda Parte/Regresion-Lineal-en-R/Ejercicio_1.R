@@ -3,6 +3,7 @@
 library("readxl")
 library("sqldf")
 library("lubridate")
+library("writexl")
 
 # asignacion tabla de excel (cursadas) en variable
 cursadas = read_excel("Datos excel/C.xlsx")
@@ -31,7 +32,7 @@ cursadasIng2011ColumnasSinNotasNulas$cond_regularidad <- replace(cursadasIng2011
 
 View(cursadasIng2011ColumnasSinNotasNulas)
 
-# Nos quedamos con las materias del primer año
+# Nos quedamos con las materias del primer a?o
 cursadasIng2011PrimerAnio <- subset(cursadasIng2011ColumnasSinNotasNulas, (materia == 1) | (materia == 2)  | (materia == 193)  | (materia == 145) | (materia == 4) | (materia == 5)  | (materia == 7)  | (materia == 125) | (materia == 127) )  # filtro por materias de primer aÃ±o
 
 
@@ -59,9 +60,10 @@ cor(cursadasPrimerAnioIngresantes2020) # correlacion lineal , devuelve la matriz
 
 regresionLinealMultiple <- lm(nota~Legajo+cond_regularidad+materia, cursadasPrimerAnioIngresantes2020) #regresion lineal multiple
 
-regresionLinealMultiple # se muestra los valores de los coeficientes (A,B,c,D) de la funcion y=Ax+Bz+Cw+D, siendo "y" la variable nota  
+regresionLinealMultiple # se muestra los valores de los coeficientes (A,B,C,D) de la funcion y=Ax+Bz+Cw+D, siendo "y" la variable nota  
 
 summary(regresionLinealMultiple) # varios datos entre ellos el coeficiente de determinacion (coeficiente a posteriori) "Adjusted R-squared:  0.06694" muy bajo
 
 
-write.csv(x = cursadasPrimerAnioIngresantes2020, file = "tablaEjercicio1.csv",row.names = FALSE) # guardo tabla en un archivo csv para probar en infostat
+write_xlsx(cursadasPrimerAnioIngresantes2020,"tablaEjercicio1.xlsx")
+write.csv(cursadasPrimerAnioIngresantes2020, file = "tablaEjercicio1.csv",row.names = FALSE)
