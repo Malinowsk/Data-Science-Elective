@@ -1,6 +1,7 @@
 # trabajando en el ejercicio 2
 
 library("readxl") 
+library("writexl") 
 library("sqldf")
 
 tablaEjercicio1 = read_excel("tablaEjercicio1.xlsx") # carga de datos del ejecicio 1
@@ -10,7 +11,7 @@ View(cursadasAprobadas)
 
 finales = read_excel("Datos excel/F.xlsx") # carga de datos del tabla finales
 
-finalesAprobados = subset(finales, nota >=4 &carrera == 206 & plan == 2011) # filtro aprobados, ing plan 2011
+finalesAprobados = subset(finales, carrera == 206 & plan == 2011) # filtro aprobados, ing plan 2011
 View(finalesAprobados)
 
 cursadasYfinales = sqldf(" select c.Legajo, c.materia , c.cond_regularidad , c.nota as notaCursada, f.nota as notaFinal 
@@ -28,3 +29,5 @@ summary(regresionLinealMultiple) # varios datos entre ellos el coeficiente de de
 
 write_xlsx(cursadasYfinales,"tablaEjercicio2.xlsx")
 write.csv(cursadasYfinales, file = "tablaEjercicio2.csv",row.names = FALSE)
+
+

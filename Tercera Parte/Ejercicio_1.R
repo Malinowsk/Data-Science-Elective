@@ -4,26 +4,26 @@ library("readxl")
 library("sqldf")
 
 # Leo la tabla generada en el trabajo practico 2
-tablaEjercicio2 = read_excel("../Segunda\ Parte/Regresion-Lineal-en-R/tablaEjercicio2.xlsx")
+NotaFinales = read_excel("NotaFinales.xlsx")
 
-View(tablaEjercicio2)
+View(NotaFinales)
 
-cantidadDeFilas = nrow(tablaEjercicio2)
+cantidadDeFilas = nrow(NotaFinales)
 
 Situacion_Final<-sample(c(0,1), size = cantidadDeFilas, replace = TRUE)
 
 # Agrego columna Situacion_Final
-columnaAgregada<-cbind(tablaEjercicio2, Situacion_Final)
+columnaAgregada<-cbind(NotaFinales, Situacion_Final)
 View(columnaAgregada)
-# Ver cuando respondan el Mail que filtro realizar exactamente
+
 # Reemplazo los valores de la columna Situacion_Final por los correctos de acuerdo a la columna notaFinal
-columnaAgregada$Situacion_Final <- replace(columnaAgregada$Situacion_Final,columnaAgregada$notaFinal<6, 0)
-columnaAgregada$Situacion_Final <- replace(columnaAgregada$Situacion_Final,columnaAgregada$notaFinal>=6, 1)
+columnaAgregada$Situacion_Final <- replace(columnaAgregada$Situacion_Final,columnaAgregada$notaFinal<4, 0)
+columnaAgregada$Situacion_Final <- replace(columnaAgregada$Situacion_Final,columnaAgregada$notaFinal>=4, 1)
 
 View(columnaAgregada)
 
+# trabajando en el ejercicio 2 del practico 3
 
-# 2)
 # Creacion del conjunto de datos de entrenamiento y de validacion
 
 # 70% del conjunto de datos para entrenamiento
@@ -49,7 +49,7 @@ predict_Situacion_Final <- predict (rl_model, validacion, type="response")  # Ca
 predict_Situacion_Final
 
 # Transformacion de probabilidades en tipo binario
-predict_Situacion_Final <- ifelse (predict_Situacion_Final>0.693, 1, 0)
+predict_Situacion_Final <- ifelse (predict_Situacion_Final>0.58, 1, 0)
 predict_Situacion_Final
 
 # Matriz de confusión
@@ -76,11 +76,9 @@ View(nuevaTabla)
 
 
 # Gráfico de los segmentos
-plot (x = nuevaTabla$Legajo,
-      nuevaTabla$materia,
-      nuevaTabla$cond_regularidad,      
-      nuevaTabla$Situacion_Final,
-      col = factor(nuevaTabla$segmento))
+braplot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad)
 
+
+plot (x = nuevaTabla$Legajo,nuevaTabla$materia , col = factor(nuevaTabla$segmento))
 
 
