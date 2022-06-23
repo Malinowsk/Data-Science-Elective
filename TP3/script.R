@@ -1,10 +1,14 @@
 # trabajando en el ejercicio 1 del practico 3
 
+install.packages("here")
+
 library("readxl") 
 library("sqldf")
+library("here")
 
 # Leo la tabla generada en el trabajo practico 2
-NotaFinales = read_excel("NotaFinales.xlsx")
+here()
+NotaFinales = read_excel(here("NotaFinales.xlsx"))
 
 View(NotaFinales)
 
@@ -14,7 +18,6 @@ Situacion_Final<-sample(c(0,1), size = cantidadDeFilas, replace = TRUE)
 
 # Agrego columna Situacion_Final
 columnaAgregada<-cbind(NotaFinales, Situacion_Final)
-View(columnaAgregada)
 
 # Reemplazo los valores de la columna Situacion_Final por los correctos de acuerdo a la columna notaFinal
 columnaAgregada$Situacion_Final <- replace(columnaAgregada$Situacion_Final,columnaAgregada$notaFinal<4, 0)
@@ -52,12 +55,12 @@ predict_Situacion_Final
 predict_Situacion_Final <- ifelse (predict_Situacion_Final>0.58, 1, 0)
 predict_Situacion_Final
 
-# Matriz de confusión
+# Matriz de confusion
 table(validacion$Situacion_Final, predict_Situacion_Final)
 
-# Cálculo de la presición
+# Calculo de la presicion
 missing_classes <- mean(predict_Situacion_Final != validacion$Situacion_Final)
-print(paste('Precisión =', 1 - missing_classes))
+print(paste('Precision =', 1 - missing_classes))
 
 
 # 3) Modelo K-Means
@@ -66,7 +69,7 @@ nuevaTabla <- columnaAgregada[c(1, 2, 3, 6)]
 View(nuevaTabla)
 
 
-# Búsqueda de clusters
+# Busqueda de clusters
 clusters <- kmeans(nuevaTabla, 2)
 
 # Agrego el cluster a los datos
@@ -108,7 +111,7 @@ nuevaTabla$segmento <- as.factor(clusters$cluster)
 
 View(nuevaTabla)
 
-# Gráfico de los segmentos
+# Gr?fico de los segmentos
 plot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad , nuevaTabla$Situacion_Final , col = factor(nuevaTabla$segmento) )
 
 
