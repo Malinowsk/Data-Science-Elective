@@ -67,7 +67,7 @@ View(nuevaTabla)
 
 
 # Búsqueda de clusters
-clusters <- kmeans(nuevaTabla, 3)
+clusters <- kmeans(nuevaTabla, 2)
 
 # Agrego el cluster a los datos
 nuevaTabla$segmento <- as.factor(clusters$cluster)
@@ -75,10 +75,40 @@ nuevaTabla$segmento <- as.factor(clusters$cluster)
 View(nuevaTabla)
 
 
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg)) 
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+# usage
+packages <- c("ggplot2", "plyr", "reshape2", "RColorBrewer", "scales", "grid")
+ipak(packages)
+
+
+fviz_cluster(clusters, data = nuevaTabla)
+
+#plot( nuevaTabla$Legajo, nuevaTabla$materia, col = factor(nuevaTabla$segmento) )
+
+
+clusters <- kmeans(nuevaTabla, 3)
+
+# Agrego el cluster a los datos
+nuevaTabla$segmento <- as.factor(clusters$cluster)
+
+View(nuevaTabla)
+
+plot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad , nuevaTabla$Situacion_Final , col = factor(nuevaTabla$segmento) )
+
+clusters <- kmeans(nuevaTabla, 4)
+
+# Agrego el cluster a los datos
+nuevaTabla$segmento <- as.factor(clusters$cluster)
+
+View(nuevaTabla)
+
 # Gráfico de los segmentos
-braplot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad)
-
-
-plot (x = nuevaTabla$Legajo,nuevaTabla$materia , col = factor(nuevaTabla$segmento))
+plot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad , nuevaTabla$Situacion_Final , col = factor(nuevaTabla$segmento) )
 
 
