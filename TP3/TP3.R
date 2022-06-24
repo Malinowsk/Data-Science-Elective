@@ -1,10 +1,23 @@
 # trabajando en el ejercicio 1 del practico 3
 
+install.packages("readxl")
+install.packages("sqldf")
 install.packages("here")
+install.packages("ClusterR")
+install.packages("cluster")
+install.packages("factoextra")
+install.packages("ggplot2")
+install.packages("NbClust")
+
 
 library("readxl") 
 library("sqldf")
 library("here")
+library("ClusterR")
+library("cluster")
+library("factoextra")
+library("NbClust")
+
 
 # Leo la tabla generada en el trabajo practico 2
 here()
@@ -63,55 +76,48 @@ missing_classes <- mean(predict_Situacion_Final != validacion$Situacion_Final)
 print(paste('Precision =', 1 - missing_classes))
 
 
+
 # 3) Modelo K-Means
 
 nuevaTabla <- columnaAgregada[c(1, 2, 3, 6)]
 View(nuevaTabla)
 
+# Calculamos cual es el numero de clusters optimo
+fviz_nbclust(nuevaTabla, kmeans, method= "silhouette")  
+#En este caso, el numero optimo de clusters es 7
+
+
 
 # Busqueda de clusters
-clusters <- kmeans(nuevaTabla, 2)
+
+## K=2
+k2 <- kmeans(nuevaTabla, 2)
+fviz_cluster(k2, data = nuevaTabla) #con k=2
 
 # Agrego el cluster a los datos
-nuevaTabla$segmento <- as.factor(clusters$cluster)
+nuevaTabla$segmento <- as.factor(k2$cluster)
 
 View(nuevaTabla)
 
 
-ipak <- function(pkg){
-  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-  if (length(new.pkg)) 
-    install.packages(new.pkg, dependencies = TRUE)
-  sapply(pkg, require, character.only = TRUE)
-}
-
-# usage
-packages <- c("ggplot2", "plyr", "reshape2", "RColorBrewer", "scales", "grid")
-ipak(packages)
-
-
-fviz_cluster(clusters, data = nuevaTabla)
-
-#plot( nuevaTabla$Legajo, nuevaTabla$materia, col = factor(nuevaTabla$segmento) )
-
-
-clusters <- kmeans(nuevaTabla, 3)
+## k=3
+nuevaTabla <- columnaAgregada[c(1, 2, 3, 6)]
+k3 <- kmeans(nuevaTabla, 3)
+fviz_cluster(k3, data = nuevaTabla) #con k=3
 
 # Agrego el cluster a los datos
-nuevaTabla$segmento <- as.factor(clusters$cluster)
+nuevaTabla$segmento <- as.factor(k3$cluster)
 
 View(nuevaTabla)
 
-plot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad , nuevaTabla$Situacion_Final , col = factor(nuevaTabla$segmento) )
 
-clusters <- kmeans(nuevaTabla, 4)
+## k=4
+nuevaTabla <- columnaAgregada[c(1, 2, 3, 6)]
+k4 <- kmeans(nuevaTabla, 4)
+fviz_cluster(k4, data = nuevaTabla) #con k=4
 
 # Agrego el cluster a los datos
-nuevaTabla$segmento <- as.factor(clusters$cluster)
+nuevaTabla$segmento <- as.factor(k4$cluster)
 
 View(nuevaTabla)
-
-# Gr?fico de los segmentos
-plot( nuevaTabla$Legajo, nuevaTabla$materia, nuevaTabla$cond_regularidad , nuevaTabla$Situacion_Final , col = factor(nuevaTabla$segmento) )
-
 
